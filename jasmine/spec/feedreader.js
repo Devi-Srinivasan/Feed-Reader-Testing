@@ -8,7 +8,7 @@
  * since some of these tests may require DOM elements. We want
  * to ensure they don't run until the DOM is ready.
  */
- 
+
 $(function() {
     /* This is our first test suite - a test suite just contains
     * a related set of tests. This suite is all about the RSS
@@ -36,9 +36,9 @@ $(function() {
 			jasmine.addMatchers({
 				toBeUrl: function() {
  					return {
-						 compare: function(actual, expected) {
+						 compare: function(actual) {
   							var result = {};
- 							result.pass = (actual.url.slice(0,7) == 'http://')||(actual.url.slice(0,8) == 'https://');
+ 							result.pass = (actual.slice(0,7) == 'http://')||(actual.slice(0,8) == 'https://');
  							if (!result.pass) {
 								result.message = "URL should start with 'http://' or 'https://'";
 							}
@@ -48,23 +48,23 @@ $(function() {
  				}
  			});
 		});
- 		it('allFeeds url not empty',function(){
- 			for (var i=0;i<allFeeds.length;i++){
-   				expect({url: (allFeeds[i].url)}).toBeUrl();
- 				expect(allFeeds[i].url).not.toBeNull;
- 			}
-		});			
- 
+		it('allFeeds url not empty',function(){
+			for (var i=0;i<allFeeds.length;i++){
+				expect(allFeeds[i].url).toBeUrl();
+				expect(allFeeds[i].url).toBeDefined();
+			}
+		});
+
         /* TODO: Write a test that loops through each feed
          * in the allFeeds object and ensures it has a name defined
          * and that the name is not empty.
          */
-		it('allFeeds name not empty',function(){	
- 			for (var i=0;i<allFeeds.length;i++){
-  				expect(allFeeds[i].name).toBeDefined();
- 				expect(allFeeds[i].name).not.toBeNull;
- 			}
-		});			
+		it('allFeeds name not empty',function(){
+			for (var i=0;i<allFeeds.length;i++){
+				expect(allFeeds[i].name).toBeDefined();
+				expect(allFeeds[i].name.length).toBeGreaterThan(0);
+			}
+		});
     });
 
 
@@ -79,8 +79,8 @@ $(function() {
 			var menuHide = $('body').hasClass('menu-hidden');
   			it('menu hidden by default',function(){
   				expect(menuHide).toBe(true);
-			});			 
-		});  
+			});
+		});
 
          /* TODO: Write a test that ensures the menu changes
           * visibility when the menu icon is clicked. This test
@@ -114,7 +114,7 @@ $(function() {
  				expect($('.feed').children().length).toBeGreaterThan(0);
 				done();
  			});
-			
+
 		});
 
     /* TODO: Write a new test suite named "New Feed Selection"
@@ -124,19 +124,19 @@ $(function() {
          * Remember, loadFeed() is asynchronous.
          */
 		describe('New Feed Selection',function(){
-			var contentBefore;
-			var contentAfter;
+			var contentBefore,
+				contentAfter;
   			beforeEach(function(done){
-				loadFeed(0,function(){	
+				loadFeed(0,function(){
  					contentBefore = $('.feed').html();
-  				});
- 				loadFeed(1,function(){
- 					done();
-				});
+					loadFeed(1,function(){
+						done();
+					});
+   				});
   			});
    			it('content should change',function(done){
  				contentAfter = $('.feed').html();
-   				expect(contentAfter).not.toEqual(contentBefore);
+    				expect(contentAfter).not.toEqual(contentBefore);
 				done();
    			});
 		});
