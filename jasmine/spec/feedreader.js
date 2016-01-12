@@ -104,7 +104,7 @@ $(function() {
             contentAfter;
         beforeEach(function(done){
             loadFeed(0,function(){
-            contentBefore = $('.feed').html();
+                contentBefore = $('.feed').html();
                 loadFeed(1,done);
             });
         });
@@ -114,4 +114,78 @@ $(function() {
             done();
         });
     });
+
+    //Test case to check if ths allFeeds name has any duplication
+
+    describe('The menu',function(){
+        beforeEach(function(){
+            jasmine.addMatchers({
+                toBeUnique : function(){
+                    return {
+                        compare : function(actual){
+                            var result = {};
+                            var allFeedsSet = new Set();
+                            var hasDuplicates = false;
+                            hasDuplicates = actual.some(function(feed){
+                                if(allFeedsSet.has(feed.name)){
+                                    return true;
+                                }else {
+                                    allFeedsSet.add(feed.name);
+                                }
+                            });
+                            if(hasDuplicates){
+                                result.message = "Name should not have duplication";
+                                result.pass = false;
+                            }else{
+                                result.pass = true;
+                            }
+                            return result;
+                        }
+                    };
+                }
+            });
+        });
+        it('Name should not have duplication',function(){
+            expect(allFeeds).toBeUnique();
+        });
+    });
+
+    //Test case to check loadFeed has any duplication
+    describe('RSS Feeds',function(){
+        //Adding a loadFeed list here.
+        beforeEach(function(done){
+            loadFeed(1,function(){
+                //Uncomment to test the case
+                //$('.feed').prepend("<a class = 'entry-link' href = 'http://swissincss.com/'><article class='entry'><h2>Swiss css</h2></article></a>");
+                done();
+            });
+
+
+            jasmine.addMatchers({
+                toBeUnique : function(){
+                    return {
+                        compare : function(actual){
+                            var result = {};
+                            var allFeedsSet = new Set();
+                            result.pass = true;
+                            actual.each(function(i,feed){
+                                if(allFeedsSet.has(feed.href)){
+                                    result.message = "Name should not have duplication";
+                                    result.pass = false;
+                                }else {
+                                    allFeedsSet.add(feed.href);
+                                }
+                            });
+                            return result;
+                        }
+                    };
+                }
+            });
+        });
+        it('should not have duplication',function(){
+                expect($('.feed').children()).toBeUnique();
+
+        });
+    });
+
 }());
