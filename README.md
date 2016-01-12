@@ -15,7 +15,7 @@ Cloned [This repo](https://github.com/udacity/frontend-nanodegree-feedreader) an
 	*	if the menu is hidden or not when page loads.
 	*	if the menu toggles when clicked.
 	*	if the page contents change when clicked.
-	*	
+
 ####Additional test cases 
 *	In addition to the required test cases additional test cases are written to check
 	*	if the hiddenmenu has any duplicate items.
